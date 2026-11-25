@@ -5,3 +5,4 @@ config.properties
 *.class
 .idea/
 .vscode/
+.DS_Store
