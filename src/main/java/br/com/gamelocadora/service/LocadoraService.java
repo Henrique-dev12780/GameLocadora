@@ -16,52 +16,52 @@ public class LocadoraService {
     }
 
     public long alugar(
-            long cliente,
-            long exemplar,
-            LocalDateTime momento
+        long cliente,
+        long exemplar,
+        LocalDateTime momento
     ) throws SQLException {
 
         HorarioFuncionamento.validar(momento);
 
         return dao.inserirAluguel(
-                cliente,
-                exemplar,
-                momento.toLocalDate()
+            cliente,
+            exemplar,
+            momento.toLocalDate()
         );
     }
 
     public long alugar(
-            long cliente,
-            long exemplar
+        long cliente,
+        long exemplar
     ) throws SQLException {
 
         return alugar(
-                cliente,
-                exemplar,
-                LocalDateTime.now()
+            cliente,
+            exemplar,
+            LocalDateTime.now()
         );
     }
 
     public BigDecimal devolver(
-            long aluguel,
-            LocalDateTime momento
+        long aluguel,
+        LocalDateTime momento
     ) throws SQLException {
 
         HorarioFuncionamento.validar(momento);
 
         return dao.devolver(
-                aluguel,
-                momento.toLocalDate()
+            aluguel,
+            momento.toLocalDate()
         );
     }
 
     public BigDecimal devolver(
-            long aluguel
+        long aluguel
     ) throws SQLException {
 
         return devolver(
-                aluguel,
-                LocalDateTime.now()
+            aluguel,
+            LocalDateTime.now()
         );
     }
 }

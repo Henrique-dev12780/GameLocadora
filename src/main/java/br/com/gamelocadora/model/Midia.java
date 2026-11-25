@@ -1,53 +1,141 @@
+
 package br.com.gamelocadora.model;
 
 import br.com.gamelocadora.exception.RegraNegocioException;
+
 import java.math.BigDecimal;
 
-public abstract class Midia implements Validavel {
+public abstract class Midia implements Validavel, Resumivel {
+
     private final Long jogoId;
+
     private String jogoTitulo;
     private String jogoPlataforma;
     private String jogoGenero;
     private BigDecimal jogoValorDiaria;
     private boolean jogoAtivo;
 
-    public Midia(String titulo, String plataforma, String genero, BigDecimal valorDiaria) {
-        this(null, titulo, plataforma, genero, valorDiaria, true);
+    public Midia(
+        String t,
+        String p,
+        String g,
+        BigDecimal v
+    ) {
+        this(
+            null,
+            t,
+            p,
+            g,
+            v,
+            true
+        );
     }
 
-    public Midia(Long id, String titulo, String plataforma, String genero,
-                 BigDecimal valorDiaria, boolean ativo) {
-        this.jogoId = id;
-        this.jogoTitulo = titulo;
-        this.jogoPlataforma = plataforma;
-        this.jogoGenero = genero;
-        this.jogoValorDiaria = valorDiaria;
-        this.jogoAtivo = ativo;
+    public Midia(
+        Long id,
+        String t,
+        String p,
+        String g,
+        BigDecimal v,
+        boolean a
+    ) {
+
+        jogoId = id;
+        jogoTitulo = t;
+        jogoPlataforma = p;
+        jogoGenero = g;
+        jogoValorDiaria = v;
+        jogoAtivo = a;
+
         validar();
     }
 
     @Override
     public void validar() {
-        if (jogoTitulo == null || jogoTitulo.isBlank())
-            throw new RegraNegocioException("O título do jogo é obrigatório.");
-        if (jogoPlataforma == null || jogoPlataforma.isBlank())
-            throw new RegraNegocioException("A plataforma é obrigatória.");
-        if (jogoGenero == null || jogoGenero.isBlank())
-            throw new RegraNegocioException("O gênero é obrigatório.");
-        if (jogoValorDiaria == null || jogoValorDiaria.compareTo(BigDecimal.ZERO) <= 0)
-            throw new RegraNegocioException("O valor da diária deve ser maior que zero.");
+
+        if (jogoTitulo == null || jogoTitulo.isBlank()) {
+            throw new RegraNegocioException(
+                "Título obrigatório."
+            );
+        }
+
+        if (jogoPlataforma == null || jogoPlataforma.isBlank()) {
+            throw new RegraNegocioException(
+                "Plataforma obrigatória."
+            );
+        }
+
+        if (jogoGenero == null || jogoGenero.isBlank()) {
+            throw new RegraNegocioException(
+                "Gênero obrigatório."
+            );
+        }
+
+        if (
+            jogoValorDiaria == null ||
+            jogoValorDiaria.signum() <= 0
+        ) {
+            throw new RegraNegocioException(
+                "Diária deve ser positiva."
+            );
+        }
     }
 
     public abstract String descricaoFormato();
 
-    public Long getJogoId() { return jogoId; }
-    public String getJogoTitulo() { return jogoTitulo; }
-    public String getJogoPlataforma() { return jogoPlataforma; }
-    public String getJogoGenero() { return jogoGenero; }
-    public BigDecimal getJogoValorDiaria() { return jogoValorDiaria; }
-    public boolean isJogoAtivo() { return jogoAtivo; }
+    public Long getJogoId() {
 
-    public void setJogoTitulo(String titulo) { this.jogoTitulo = titulo; validar(); }
-    public void setJogoValorDiaria(BigDecimal valor) { this.jogoValorDiaria = valor; validar(); }
-    public void setJogoAtivo(boolean ativo) { this.jogoAtivo = ativo; }
+        return jogoId;
+    }
+
+    public String getJogoTitulo() {
+
+        return jogoTitulo;
+    }
+
+    public String getJogoPlataforma() {
+
+        return jogoPlataforma;
+    }
+
+    public String getJogoGenero() {
+
+        return jogoGenero;
+    }
+
+    public BigDecimal getJogoValorDiaria() {
+
+        return jogoValorDiaria;
+    }
+
+    public boolean isJogoAtivo() {
+
+        return jogoAtivo;
+    }
+
+    public void setJogoTitulo(String v) {
+
+        jogoTitulo = v;
+        validar();
+    }
+
+    public void setJogoValorDiaria(BigDecimal v) {
+
+        jogoValorDiaria = v;
+        validar();
+    }
+
+    public void setJogoAtivo(boolean v) {
+
+        jogoAtivo = v;
+    }
+
+    @Override
+    public String resumo() {
+
+        return jogoId +
+               " | " + jogoTitulo +
+               " | " + jogoPlataforma +
+               " | " + descricaoFormato();
+    }
 }

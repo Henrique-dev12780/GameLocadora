@@ -1,3 +1,4 @@
+
 package br.com.gamelocadora.config;
 
 import java.io.IOException;
@@ -10,37 +11,44 @@ import java.sql.SQLException;
 import java.util.Properties;
 
 public final class Conexao {
-    private static final Properties PROPERTIES = carregar();
 
-    private Conexao() { }
+    private static final Properties P = carregar();
+
+    private Conexao() {
+    }
 
     private static Properties carregar() {
-        Properties properties = new Properties();
         Path arquivo = Path.of("config.properties");
+
         if (!Files.exists(arquivo)) {
             throw new IllegalStateException(
-                "Arquivo config.properties não encontrado. Copie config.exemplo.properties e configure o acesso."
+                "Crie config.properties a partir de " +
+                "config.exemplo.properties."
             );
         }
-        try (InputStream input = Files.newInputStream(arquivo)) {
-            properties.load(input);
-            return properties;
+
+        Properties p = new Properties();
+
+        try (InputStream in = Files.newInputStream(arquivo)) {
+            p.load(in);
+            return p;
         } catch (IOException e) {
-            throw new IllegalStateException("Erro ao ler config.properties.", e);
+            throw new IllegalStateException(
+                "Não foi possível ler config.properties.",
+                e
+            );
         }
     }
 
-    public static Connection obterConexao() throws SQLException {
+    public static Connection obter() throws SQLException {
         return DriverManager.getConnection(
-            PROPERTIES.getProperty("db.url"),
-            PROPERTIES.getProperty("db.usuario"),
-            PROPERTIES.getProperty("db.senha")
+            P.getProperty("db.url"),
+            P.getProperty("db.usuario"),
+            P.getProperty("db.senha")
         );
     }
 
-    public static void testarConexao() throws SQLException {
-        try (Connection ignored = obterConexao()) {
-            System.out.println("Conexão com PostgreSQL estabelecida.");
-        }
+    public static Connection obterConexao() throws SQLException {
+        return obter();
     }
 }

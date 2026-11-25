@@ -1,22 +1,33 @@
+
 package br.com.gamelocadora.model;
 
 import java.math.BigDecimal;
 
-public class JogoDisco extends Midia implements Resumivel {
-    public JogoDisco(String titulo, String plataforma, String genero, BigDecimal diaria) {
-        super(titulo, plataforma, genero, diaria);
+public class JogoDisco extends Midia {
+
+    public JogoDisco(
+        String t,
+        String p,
+        String g,
+        BigDecimal v
+    ) {
+        super(t, p, g, v);
     }
 
-    public JogoDisco(Long id, String titulo, String plataforma, String genero,
-                     BigDecimal diaria, boolean ativo) {
-        super(id, titulo, plataforma, genero, diaria, ativo);
+    public JogoDisco(
+        Long id,
+        String t,
+        String p,
+        String g,
+        BigDecimal v,
+        boolean a
+    ) {
+        super(id, t, p, g, v, a);
     }
 
     @Override
-    public String descricaoFormato() { return "Mídia em disco"; }
+    public String descricaoFormato() {
 
-    @Override
-    public String resumo() {
-        return getJogoId() + " | " + getJogoTitulo() + " | " + getJogoPlataforma() + " | DISCO";
+        return "Mídia em disco";
     }
 }
