@@ -1,29 +1,41 @@
+
 package br.com.gamelocadora.service;
 
 import br.com.gamelocadora.exception.RegraNegocioException;
-import java.time.DayOfWeek;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
+import java.time.*;
 
 public final class HorarioFuncionamento {
-    private HorarioFuncionamento() { }
 
-    public static void validar(LocalDateTime momento) {
-        DayOfWeek dia = momento.getDayOfWeek();
-        LocalTime hora = momento.toLocalTime();
+    private HorarioFuncionamento() {
+    }
 
-        boolean diaUtil = dia.getValue() >= DayOfWeek.MONDAY.getValue()
-                       && dia.getValue() <= DayOfWeek.FRIDAY.getValue();
-        boolean sabado = dia == DayOfWeek.SATURDAY;
+    public static void validar(LocalDateTime m) {
+        DayOfWeek d = m.getDayOfWeek();
+        LocalTime h = m.toLocalTime();
 
-        boolean dentroDoHorario = diaUtil
-            ? !hora.isBefore(LocalTime.of(8, 0)) && hora.isBefore(LocalTime.of(18, 0))
-            : sabado && !hora.isBefore(LocalTime.of(8, 0)) && hora.isBefore(LocalTime.NOON);
+        boolean ok = (
+            d.getValue() <= 5
+            && !h.isBefore(LocalTime.of(8, 0))
+            && h.isBefore(LocalTime.of(18, 0))
+        ) || (
+            d == DayOfWeek.SATURDAY
+            && !h.isBefore(LocalTime.of(8, 0))
+            && h.isBefore(LocalTime.NOON)
+        );
 
-        if (!dentroDoHorario) {
+        if (!ok) {
             throw new RegraNegocioException(
-                "Atendimento: segunda a sexta, das 08:00 às 18:00; sábado, das 08:00 às 12:00. Domingo fechado."
+                "Funcionamento: segunda a sexta, 08:00–18:00; "
+                + "sábado, 08:00–12:00; domingo fechado."
             );
         }
+    }
+
+    public static LocalDate ajustarPrazo(LocalDate prevista) {
+        while (prevista.getDayOfWeek() == DayOfWeek.SUNDAY) {
+            prevista = prevista.plusDays(1);
+        }
+
+        return prevista;
     }
 }
