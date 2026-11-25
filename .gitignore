@@ -1,0 +1,7 @@
+target/
+out/
+bin/
+config.properties
+*.class
+.idea/
+.vscode/
